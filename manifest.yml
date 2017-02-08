@@ -1,0 +1,11 @@
+applications:
+
+    - name: redis-info
+      path: ./redis_info
+      memory: 512MB
+      disk_quota: 512MB
+      instances: 1
+      buildpack: python_buildpack
+      command: python app.py
+      services:
+        - twitter-nlp-redis
