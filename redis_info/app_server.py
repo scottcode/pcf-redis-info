@@ -48,7 +48,33 @@ def redis_list_len():
         })
 
 
-def serve():
+@app.route('/redis_slowlog_len', methods=['GET'])
+def redis_slowlog_len():
+    request_time = time.strftime('%c (%z)', time.localtime())
+    slowlog_len = r.slowlog_len()
+    return jsonify({
+        'time': request_time,
+        'slowlog_len': slowlog_len
+    })
+
+
+@app.route('/redis_slowlog_get', methods=['GET'])
+def redis_slowlog_get():
+    request_time = time.strftime('%c (%z)', time.localtime())
+    n = request.args.get('n')
+    if n is not None:
+        try:
+            n = int(n)
+        except (TypeError, ValueError):
+            n = None
+    slowlog_list = r.slowlog_get(n)
+    return jsonify({
+        'time': request_time,
+        'slowlog_list': slowlog_list
+    })
+
+
+def serve_forever():
     """Start app server"""
     if os.environ.get('VCAP_SERVICES') is None:  # running locally
         PORT = 5001
@@ -60,4 +86,4 @@ def serve():
 
 
 if __name__ == '__main__':
-    serve()
+    serve_forever()

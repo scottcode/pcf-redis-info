@@ -6,6 +6,6 @@ applications:
       disk_quota: 512MB
       instances: 1
       buildpack: python_buildpack
-      command: python app.py
+      command: python app_server.py
       services:
         - twitter-nlp-redis
