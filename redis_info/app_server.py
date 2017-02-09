@@ -74,6 +74,16 @@ def redis_slowlog_get():
     })
 
 
+@app.route('/redis_client_list', methods=['GET'])
+def redis_client_list():
+    request_time = time.strftime('%c (%z)', time.localtime())
+    client_list = r.client_list()
+    return jsonify({
+        'time': request_time,
+        'client_list': client_list
+    })
+
+
 def serve_forever():
     """Start app server"""
     if os.environ.get('VCAP_SERVICES') is None:  # running locally

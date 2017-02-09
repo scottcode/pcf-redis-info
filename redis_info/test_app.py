@@ -69,6 +69,22 @@ class TestApp(unittest.TestCase):
             "slowlog_get should give a list. Got {}".format(type(slowlog_list))
         )
 
+    def test_client_list(self):
+        response = self.app.get('/redis_client_list')
+        self.assertEqual(response.status_code, 200, 'Error in request for client_list')
+        data_dict = response_to_json(response)
+        client_list = data_dict.get('client_list')
+        self.assertIsNotNone(client_list, 'Did not receive client_list key')
+        self.assertIsInstance(
+            client_list, list,
+            "redis_client_list should give a list. Got {}".format(type(client_list))
+        )
+        self.assertGreater(
+            len(client_list), 0,
+            "Client list should have >0 clients. Had {}".format(len(client_list))
+        )
+
+
 
 if __name__ == '__main__':
     unittest.main()
